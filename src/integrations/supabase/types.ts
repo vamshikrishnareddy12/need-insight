@@ -14,16 +14,299 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analytics_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          metadata: Json
+          query: string | null
+          service_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          metadata?: Json
+          query?: string | null
+          service_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          metadata?: Json
+          query?: string | null
+          service_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_events_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      saved_services: {
+        Row: {
+          created_at: string
+          id: string
+          service_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          service_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          service_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_services_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_submissions: {
+        Row: {
+          category_slug: string | null
+          contact_email: string | null
+          created_at: string
+          description: string
+          id: string
+          name: string
+          notes: string | null
+          official_url: string
+          status: string
+          submitted_by: string | null
+        }
+        Insert: {
+          category_slug?: string | null
+          contact_email?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          name: string
+          notes?: string | null
+          official_url: string
+          status?: string
+          submitted_by?: string | null
+        }
+        Update: {
+          category_slug?: string | null
+          contact_email?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          official_url?: string
+          status?: string
+          submitted_by?: string | null
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          availability: string | null
+          best_for: string[]
+          category_id: string | null
+          cons: string[]
+          created_at: string
+          description: string
+          features: string[]
+          founded_year: number | null
+          has_free_plan: boolean | null
+          has_free_trial: boolean | null
+          id: string
+          logo_url: string | null
+          long_description: string | null
+          name: string
+          official_url: string
+          platforms: string[]
+          price_description: string | null
+          pricing_type: string
+          pros: string[]
+          slug: string
+          status: string
+          subcategory: string | null
+          tags: string[]
+          updated_at: string
+        }
+        Insert: {
+          availability?: string | null
+          best_for?: string[]
+          category_id?: string | null
+          cons?: string[]
+          created_at?: string
+          description: string
+          features?: string[]
+          founded_year?: number | null
+          has_free_plan?: boolean | null
+          has_free_trial?: boolean | null
+          id?: string
+          logo_url?: string | null
+          long_description?: string | null
+          name: string
+          official_url: string
+          platforms?: string[]
+          price_description?: string | null
+          pricing_type?: string
+          pros?: string[]
+          slug: string
+          status?: string
+          subcategory?: string | null
+          tags?: string[]
+          updated_at?: string
+        }
+        Update: {
+          availability?: string | null
+          best_for?: string[]
+          category_id?: string | null
+          cons?: string[]
+          created_at?: string
+          description?: string
+          features?: string[]
+          founded_year?: number | null
+          has_free_plan?: boolean | null
+          has_free_trial?: boolean | null
+          id?: string
+          logo_url?: string | null
+          long_description?: string | null
+          name?: string
+          official_url?: string
+          platforms?: string[]
+          price_description?: string | null
+          pricing_type?: string
+          pros?: string[]
+          slug?: string
+          status?: string
+          subcategory?: string | null
+          tags?: string[]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      search_services: {
+        Args: { category_slug?: string; q: string }
+        Returns: {
+          availability: string | null
+          best_for: string[]
+          category_id: string | null
+          cons: string[]
+          created_at: string
+          description: string
+          features: string[]
+          founded_year: number | null
+          has_free_plan: boolean | null
+          has_free_trial: boolean | null
+          id: string
+          logo_url: string | null
+          long_description: string | null
+          name: string
+          official_url: string
+          platforms: string[]
+          price_description: string | null
+          pricing_type: string
+          pros: string[]
+          slug: string
+          status: string
+          subcategory: string | null
+          tags: string[]
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "services"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +433,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
