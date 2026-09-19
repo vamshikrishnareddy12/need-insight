@@ -47,7 +47,7 @@ export const searchServices = createServerFn({ method: "GET" })
     const q = (data.q ?? "").trim();
     const { data: rows, error } = await supabase.rpc("search_services", {
       q,
-      category_slug: data.category && data.category !== "all" ? data.category : null,
+      category_slug: data.category && data.category !== "all" ? data.category : undefined,
     });
     if (error) throw new Error(error.message);
 
